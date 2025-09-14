@@ -97,41 +97,46 @@
                 return options.slice(0, numOptions);
             }
             
-            // Toss function
-            function tossCoin() {
-                if (isTossing) return;
-                
-                isTossing = true;
-                const numOptions = parseInt(optionsSelect.value);
-                const options = getAllOptionValues();
-                
-                // Reset and start animation
-                coinInner.classList.remove('tossing');
-                void coinInner.offsetWidth; // Trigger reflow
-                coinInner.classList.add('tossing');
-                
-                // Generate random result
-                setTimeout(() => {
-                    const randomIndex = Math.floor(Math.random() * numOptions);
-                    const result = options[randomIndex];
-                    const resultText = `Selected: ${result}!`;
-                    
-                    // Display result
-                    resultDiv.innerHTML = `<h3 class="win">${resultText}</h3>`;
-                    
-                    // Add to history
-                    const historyItem = {
-                        result,
-                        time: new Date().toLocaleTimeString(),
-                        type: numOptions > 2 ? `${numOptions}-option` : 'coin toss'
-                    };
-                    
-                    history.unshift(historyItem);
-                    updateHistory();
-                    
-                    isTossing = false;
-                }, 1500);
-            }
+// Toss function
+function tossCoin() {
+    if (isTossing) return;
+    
+    isTossing = true;
+    const numOptions = parseInt(optionsSelect.value);
+    const options = getAllOptionValues();
+    
+    // Reset and start animation
+    coinInner.classList.remove('tossing');
+    void coinInner.offsetWidth; // Trigger reflow
+    coinInner.classList.add('tossing');
+    
+    // Generate random result
+    setTimeout(() => {
+        const randomIndex = Math.floor(Math.random() * numOptions);
+        const result = options[randomIndex];
+        const resultText = `Selected: ${result}!`;
+        
+        // Display result
+        resultDiv.innerHTML = `<h3 class="win">${resultText}</h3>`;
+        
+        // Add to history
+        const historyItem = {
+            result,
+            time: new Date().toLocaleTimeString('en-US', { 
+                hour12: true, 
+                hour: 'numeric', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            }),
+            type: numOptions > 2 ? `${numOptions}-option` : 'coin toss'
+        };
+        
+        history.unshift(historyItem);
+        updateHistory();
+        
+        isTossing = false;
+    }, 1500);
+}
             
             // Update history display
             function updateHistory() {
@@ -146,7 +151,6 @@
                     historyList.appendChild(li);
                 });
             }
-            
             // Event listeners
             tossBtn.addEventListener('click', tossCoin);
             optionsSelect.addEventListener('change', createOptionInputs);
